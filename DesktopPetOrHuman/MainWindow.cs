@@ -18,26 +18,113 @@ public sealed class MainWindow : Window
     private readonly TextBlock _bubbleText;
     private readonly DispatcherTimer _idleTimer;
     private readonly DispatcherTimer _bubbleTimer;
+    private readonly AppLaunchWatcher _appWatcher = new();
     private readonly Random _random = new();
     private readonly CharacterDefinition[] _characters =
     [
-        new("喵白白", "miaobaibai"),
-        new("喵布布", "miaobubu"),
-        new("小塗", "xiaotu"),
-        new("Old Wang Cat", "laowangmao"),
-        new("鋒兄", "fengxiong"),
-        new("鋒哥", "fengge"),
-        new("小英", "xiaoying"),
-        new("喵娘", "miaoniang"),
-        new("塗哥", "tuge"),
-        new("牙妹", "yamei"),
-        new("魚妹", "yumei"),
-        new("ググガガ", "gugugaga")
+        new(
+            "喵白白",
+            "miaobaibai",
+            "喵～白白來陪你了",
+            "喵嗚！好開心",
+            "白白想睡了…",
+            "白白先去睡覺了喵",
+            ["白白在這裡喔", "可以摸摸我的帽子", "今天也要乖乖的"]),
+        new(
+            "喵布布",
+            "miaobubu",
+            "布布衝出來囉！",
+            "嘿嘿，再摸一下！",
+            "布布先趴一下…",
+            "布布明天再來玩",
+            ["有零食嗎", "布布最可愛", "陪我玩嘛"]),
+        new(
+            "小塗",
+            "xiaotu",
+            "嘿，小塗報到！",
+            "耶！今天也超讚",
+            "先喝口茶再睡…",
+            "小塗先閃了，掰掰",
+            ["作業寫完了嗎", "右鍵可以換朋友", "我會待在桌角"]),
+        new(
+            "Old Wang Cat",
+            "laowangmao",
+            "招財進寶！老王貓報到",
+            "金元寶來了！",
+            "賺飽了，先睡一波",
+            "財神先收工，明天見",
+            ["財源滾滾來", "摸摸我招好運", "今天也要發大財"]),
+        new(
+            "鋒兄",
+            "fengxiong",
+            "鋒兄來了，今天一起慢慢來",
+            "哈哈，被你逗樂了",
+            "先瞇一下，別吵",
+            "鋒兄先走了，別太晚睡",
+            ["記得喝水", "工作別太拼", "我在旁邊看著"]),
+        new(
+            "鋒哥",
+            "fengge",
+            "鋒哥上線，開始幹活",
+            "做得好！",
+            "午休十分鐘，別吵",
+            "鋒哥下班了",
+            ["進度如何？", "會議先放著", "需要幫忙再叫我"]),
+        new(
+            "小英",
+            "xiaoying",
+            "小英打卡了",
+            "有被鼓勵到…",
+            "先閉一下眼…",
+            "小英終於可以打卡下班…",
+            ["郵件回完了嗎", "再撐一下就下班", "咖啡續一下"]),
+        new(
+            "喵娘",
+            "miaoniang",
+            "喵娘來啦～一起玩嘛",
+            "喵喵！最喜歡你了",
+            "喵娘要捲成一團了",
+            "喵娘去睡美容覺囉",
+            ["摸摸頭可以嗎", "今天也要被疼愛", "右鍵換我的朋友"]),
+        new(
+            "塗哥",
+            "tuge",
+            "塗哥登場！準備開幹",
+            "耶嘿！超有精神",
+            "才沒有累…只是躺一下",
+            "塗哥先撤！明天再衝",
+            ["今天也要第一", "別發呆啦", "跟塗哥一起加油"]),
+        new(
+            "牙妹",
+            "yamei",
+            "牙妹來陪你了",
+            "呵呵，好開心",
+            "蓋好被子，晚安",
+            "牙妹先回家了，晚安",
+            ["功課寫了嗎", "要記得休息", "我會安靜陪著你"]),
+        new(
+            "魚妹",
+            "yumei",
+            "撲通～魚妹游過來了",
+            "尾巴都在搖了！",
+            "縮回貝殼裡睡一下",
+            "魚妹游回海里囉",
+            ["這裡也有海的味道", "想聽海浪嗎", "別把我弄乾了"]),
+        new(
+            "ググガガ",
+            "gugugaga",
+            "ググ！ガガ！企鵝報到",
+            "ガガガ！好開心",
+            "企鵝要站著睡了…Zzz",
+            "ググ…ペンギン寝る",
+            ["ググガガ", "今天也要滑行", "肚子想吃魚"])
     ];
     private Bitmap[] _moods = [];
     private CharacterDefinition _currentCharacter;
     private int _idleTick;
     private bool _isDragging;
+    private bool _farewellStarted;
+    private bool _farewellDone;
 
     public MainWindow()
     {
@@ -75,7 +162,7 @@ public sealed class MainWindow : Window
 
         _bubbleText = new TextBlock
         {
-            Text = "嗨！",
+            Text = _currentCharacter.Greeting,
             FontSize = 14,
             Foreground = Brushes.White,
             TextAlignment = TextAlignment.Center,
@@ -111,7 +198,16 @@ public sealed class MainWindow : Window
         PointerPressed += OnPointerPressed;
         PointerReleased += (_, _) => _isDragging = false;
         DoubleTapped += (_, _) => Cheer();
-        Opened += (_, _) => MoveToLowerRight();
+        Opened += (_, _) =>
+        {
+            MoveToLowerRight();
+            ShowBubble(_currentCharacter.Greeting, 3.2);
+            _appWatcher.Start();
+        };
+        Closed += (_, _) => _appWatcher.Dispose();
+        Closing += OnWindowClosing;
+
+        _appWatcher.AppChanged += OnAppChanged;
 
         _idleTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(90) };
         _idleTimer.Tick += (_, _) => AnimateIdle();
@@ -148,7 +244,7 @@ public sealed class MainWindow : Window
         smaller.Click += (_, _) => ResizePet(0.9);
 
         var sleep = new MenuItem { Header = "睡一下" };
-        sleep.Click += (_, _) => SetMood(2, "Zzz...");
+        sleep.Click += (_, _) => SetMood(2, _currentCharacter.Sleep);
 
         var characters = new MenuItem { Header = "切換角色" };
         characters.ItemsSource = _characters.Select(character =>
@@ -212,14 +308,46 @@ public sealed class MainWindow : Window
 
         if (_idleTick % 95 == 0 && !_bubble.IsVisible)
         {
-            var messages = new[] { $"{_currentCharacter.DisplayName}在這裡！", "點兩下會開心", "右鍵可以換角色", "我會乖乖待在桌面上" };
+            var messages = _currentCharacter.Idle;
             ShowBubble(messages[_random.Next(messages.Length)]);
         }
     }
 
     private void Cheer()
     {
-        SetMood(1, "嘿嘿！");
+        SetMood(1, _currentCharacter.Cheer);
+    }
+
+    private void OnAppChanged(AppWatchEvent watchEvent)
+    {
+        ShowBubble(AppDialogue.For(_currentCharacter.Key, watchEvent), 3.4);
+    }
+
+    private void OnWindowClosing(object? sender, WindowClosingEventArgs e)
+    {
+        if (_farewellDone)
+        {
+            return;
+        }
+
+        e.Cancel = true;
+        if (_farewellStarted)
+        {
+            return;
+        }
+
+        _farewellStarted = true;
+        _appWatcher.Dispose();
+        ShowBubble(_currentCharacter.Farewell, 2.4);
+
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.8) };
+        timer.Tick += (_, _) =>
+        {
+            timer.Stop();
+            _farewellDone = true;
+            Close();
+        };
+        timer.Start();
     }
 
     private void SetMood(int moodIndex, string message)
@@ -236,11 +364,12 @@ public sealed class MainWindow : Window
         restoreTimer.Start();
     }
 
-    private void ShowBubble(string message)
+    private void ShowBubble(string message, double seconds = 2.4)
     {
         _bubbleText.Text = message;
         _bubble.IsVisible = true;
         _bubbleTimer.Stop();
+        _bubbleTimer.Interval = TimeSpan.FromSeconds(seconds);
         _bubbleTimer.Start();
     }
 
@@ -296,7 +425,7 @@ public sealed class MainWindow : Window
         _currentCharacter = character;
         LoadCharacter(character);
         _petImage.Source = _moods[0];
-        ShowBubble($"我是{character.DisplayName}");
+        ShowBubble(character.Greeting, 3.2);
     }
 
     private void LoadCharacter(CharacterDefinition character)
@@ -309,5 +438,12 @@ public sealed class MainWindow : Window
         ];
     }
 
-    private readonly record struct CharacterDefinition(string DisplayName, string Key);
+    private readonly record struct CharacterDefinition(
+        string DisplayName,
+        string Key,
+        string Greeting,
+        string Cheer,
+        string Sleep,
+        string Farewell,
+        string[] Idle);
 }
