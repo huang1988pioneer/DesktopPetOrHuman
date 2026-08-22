@@ -126,12 +126,20 @@ public sealed class MainWindow : Window
     private bool _farewellStarted;
     private bool _farewellDone;
 
+    private const double MinWindowWidth = 150;
+    private const double MaxWindowWidth = 360;
+    private const double MinWindowHeight = 180;
+    private const double MaxWindowHeight = 420;
+    private const double MinPetSize = 115;
+    private const double MaxPetSize = 285;
+
     public MainWindow()
     {
-        _currentCharacter = _characters[0];
+        var settings = AppSettings.Load();
+        _currentCharacter = ResolveStartupCharacter(settings.LastCharacterKey);
 
-        Width = 210;
-        Height = 250;
+        Width = RestoreSize(settings.WindowWidth, MinWindowWidth, MaxWindowWidth, MaxWindowWidth);
+        Height = RestoreSize(settings.WindowHeight, MinWindowHeight, MaxWindowHeight, MaxWindowHeight);
         CanResize = false;
         ShowInTaskbar = false;
         Topmost = true;
@@ -146,8 +154,8 @@ public sealed class MainWindow : Window
         _petImage = new Image
         {
             Source = _moods[0],
-            Width = 170,
-            Height = 170,
+            Width = RestoreSize(settings.PetSize, MinPetSize, MaxPetSize, MaxPetSize),
+            Height = RestoreSize(settings.PetSize, MinPetSize, MaxPetSize, MaxPetSize),
             Stretch = Stretch.Uniform,
             RenderTransformOrigin = RelativePoint.Center,
             RenderTransform = new TransformGroup
@@ -381,11 +389,12 @@ public sealed class MainWindow : Window
 
     private void ResizePet(double factor)
     {
-        Width = Math.Clamp(Width * factor, 150, 360);
-        Height = Math.Clamp(Height * factor, 180, 420);
-        _petImage.Width = Math.Clamp(_petImage.Width * factor, 115, 285);
-        _petImage.Height = Math.Clamp(_petImage.Height * factor, 115, 285);
+        Width = Math.Clamp(Width * factor, MinWindowWidth, MaxWindowWidth);
+        Height = Math.Clamp(Height * factor, MinWindowHeight, MaxWindowHeight);
+        _petImage.Width = Math.Clamp(_petImage.Width * factor, MinPetSize, MaxPetSize);
+        _petImage.Height = Math.Clamp(_petImage.Height * factor, MinPetSize, MaxPetSize);
         KeepInsideScreen();
+        AppSettings.SaveLastSize(Width, Height, _petImage.Width);
     }
 
     private void MoveToLowerRight()
@@ -420,12 +429,39 @@ public sealed class MainWindow : Window
 
     private int WindowPixelHeight => Math.Max(1, (int)Math.Ceiling(Bounds.Height * RenderScaling));
 
+    private static double RestoreSize(double? saved, double min, double max, double fallback)
+    {
+        if (saved is not double value || double.IsNaN(value) || double.IsInfinity(value))
+        {
+            return fallback;
+        }
+
+        return Math.Clamp(value, min, max);
+    }
+
+    private CharacterDefinition ResolveStartupCharacter(string? savedKey)
+    {
+        if (!string.IsNullOrWhiteSpace(savedKey))
+        {
+            foreach (var character in _characters)
+            {
+                if (string.Equals(character.Key, savedKey, StringComparison.OrdinalIgnoreCase))
+                {
+                    return character;
+                }
+            }
+        }
+
+        return _characters[0];
+    }
+
     private void SwitchCharacter(CharacterDefinition character)
     {
         _currentCharacter = character;
         LoadCharacter(character);
         _petImage.Source = _moods[0];
         ShowBubble(character.Greeting, 3.2);
+        AppSettings.SaveLastCharacterKey(character.Key);
     }
 
     private void LoadCharacter(CharacterDefinition character)
