@@ -58,7 +58,19 @@ internal sealed class AppLaunchWatcher : IDisposable
         "OpenConsole",
         "wsl",
         "wslhost",
-        "wslservice"
+        "wslservice",
+        "loginwindow",
+        "Dock",
+        "SystemUIServer",
+        "WindowServer",
+        "Window Server",
+        "ControlCenter",
+        "NotificationCenter",
+        "Spotlight",
+        "Siri",
+        "Wallpaper",
+        "WallpaperAgent",
+        "Finder"
     };
 
     private static readonly Dictionary<string, AppLaunch> Catalog = CreateCatalog();
@@ -174,6 +186,12 @@ internal sealed class AppLaunchWatcher : IDisposable
 
     private void CollectProcessChanges(List<AppLaunch> opened, List<AppLaunch> closed)
     {
+        if (OperatingSystem.IsMacOS())
+        {
+            CollectMacAppChanges(opened, closed);
+            return;
+        }
+
         Process[] processes;
         try
         {
@@ -190,7 +208,7 @@ internal sealed class AppLaunchWatcher : IDisposable
         {
             try
             {
-                if (process.SessionId != _sessionId)
+                if (OperatingSystem.IsWindows() && process.SessionId != _sessionId)
                 {
                     continue;
                 }
@@ -245,6 +263,81 @@ internal sealed class AppLaunchWatcher : IDisposable
         }
     }
 
+    private void CollectMacAppChanges(List<AppLaunch> opened, List<AppLaunch> closed)
+    {
+        var namesNow = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var borrowed = new List<Process>();
+        try
+        {
+            foreach (var app in VisibleAppProbe.ListMacRegularApps())
+            {
+                Process? process = null;
+                try
+                {
+                    process = Process.GetProcessById(app.ProcessId);
+                    borrowed.Add(process);
+                }
+                catch
+                {
+                    process = null;
+                }
+
+                var processName = process?.ProcessName ?? app.Name;
+                if (string.IsNullOrWhiteSpace(processName) || IsIgnored(processName) || IsIgnored(app.Name))
+                {
+                    continue;
+                }
+
+                namesNow.Add(processName);
+                if (_seen.Contains(processName))
+                {
+                    continue;
+                }
+
+                AppLaunch launch;
+                if (process is not null)
+                {
+                    TryResolveVisible(process, processName, app.Name, out launch);
+                }
+                else
+                {
+                    launch = new AppLaunch(TrimDisplay(app.Name), AppKind.Generic, processName, app.ProcessId);
+                }
+
+                opened.Add(launch);
+                _tracked[processName] = launch;
+            }
+        }
+        finally
+        {
+            foreach (var process in borrowed)
+            {
+                process.Dispose();
+            }
+        }
+
+        foreach (var (name, launch) in _tracked.ToArray())
+        {
+            if (namesNow.Contains(name))
+            {
+                continue;
+            }
+
+            closed.Add(launch);
+            _tracked.Remove(name);
+        }
+
+        closed.RemoveAll(launch =>
+            _tracked.Values.Any(tracked =>
+                string.Equals(tracked.DisplayName, launch.DisplayName, StringComparison.OrdinalIgnoreCase)));
+
+        _seen.RemoveWhere(name => !namesNow.Contains(name));
+        foreach (var name in namesNow)
+        {
+            _seen.Add(name);
+        }
+    }
+
     private void CollectVisibleChanges(List<AppLaunch> opened, List<AppLaunch> closed)
     {
         var visibleNow = ScanVisibleApps();
@@ -261,10 +354,31 @@ internal sealed class AppLaunchWatcher : IDisposable
             }
         }
 
+        HashSet<int>? hiddenPids = null;
+        if (OperatingSystem.IsMacOS())
+        {
+            hiddenPids = [];
+            foreach (var app in VisibleAppProbe.ListMacRegularApps())
+            {
+                if (app.IsHidden)
+                {
+                    hiddenPids.Add(app.ProcessId);
+                }
+            }
+        }
+
         foreach (var (displayName, launch) in _visibleApps.ToArray())
         {
             if (visibleNow.ContainsKey(displayName))
             {
+                continue;
+            }
+
+            if (hiddenPids is not null
+                && launch.ProcessId > 0
+                && hiddenPids.Contains(launch.ProcessId))
+            {
+                // Cmd+H: keep tracking so unhide is not treated as a new open.
                 continue;
             }
 
@@ -295,6 +409,13 @@ internal sealed class AppLaunchWatcher : IDisposable
                     }
                     catch
                     {
+                        if (!string.IsNullOrWhiteSpace(window.Title) && !IsIgnored(window.Title))
+                        {
+                            found.TryAdd(
+                                window.Title,
+                                new AppLaunch(TrimDisplay(window.Title), AppKind.Generic, window.Title, window.ProcessId));
+                        }
+
                         continue;
                     }
 
@@ -303,7 +424,7 @@ internal sealed class AppLaunchWatcher : IDisposable
 
                 try
                 {
-                    if (process.SessionId != _sessionId)
+                    if (OperatingSystem.IsWindows() && process.SessionId != _sessionId)
                     {
                         continue;
                     }
@@ -314,7 +435,7 @@ internal sealed class AppLaunchWatcher : IDisposable
                         continue;
                     }
 
-                    if (TryResolveVisible(process, name, out var launch))
+                    if (TryResolveVisible(process, name, window.Title, out var launch))
                     {
                         found.TryAdd(launch.DisplayName, launch);
                     }
@@ -336,15 +457,25 @@ internal sealed class AppLaunchWatcher : IDisposable
         return found;
     }
 
-    private static bool TryResolveVisible(Process process, string processName, out AppLaunch launch)
+    private static bool TryResolveVisible(Process process, string processName, string windowTitle, out AppLaunch launch)
     {
         if (Catalog.TryGetValue(processName, out launch))
         {
+            launch = launch with { ProcessId = process.Id };
             return true;
         }
 
-        launch = new AppLaunch(ReadDisplayName(process, processName), AppKind.Generic, processName);
+        var display = !string.IsNullOrWhiteSpace(windowTitle)
+            ? TrimDisplay(windowTitle)
+            : ReadDisplayName(process, processName);
+        launch = new AppLaunch(display, AppKind.Generic, processName, process.Id);
         return true;
+    }
+
+    private static string TrimDisplay(string value)
+    {
+        var trimmed = value.Trim();
+        return trimmed.Length <= 16 ? trimmed : trimmed[..14] + "…";
     }
 
     private static AppLaunch[] DistinctApps(List<AppLaunch> launches) =>
@@ -357,29 +488,36 @@ internal sealed class AppLaunchWatcher : IDisposable
     {
         try
         {
-            foreach (var process in Process.GetProcesses())
+            if (OperatingSystem.IsMacOS())
             {
-                try
+                CaptureMacSeen();
+            }
+            else
+            {
+                foreach (var process in Process.GetProcesses())
                 {
-                    if (process.SessionId != _sessionId || string.IsNullOrWhiteSpace(process.ProcessName))
+                    try
                     {
-                        continue;
-                    }
+                        if (process.SessionId != _sessionId || string.IsNullOrWhiteSpace(process.ProcessName))
+                        {
+                            continue;
+                        }
 
-                    var name = process.ProcessName;
-                    _seen.Add(name);
-                    if (!IsIgnored(name) && TryResolve(process, name, out var launch))
-                    {
-                        _tracked[name] = launch;
+                        var name = process.ProcessName;
+                        _seen.Add(name);
+                        if (!IsIgnored(name) && TryResolve(process, name, out var launch))
+                        {
+                            _tracked[name] = launch;
+                        }
                     }
-                }
-                catch
-                {
-                    // Ignore processes we cannot inspect.
-                }
-                finally
-                {
-                    process.Dispose();
+                    catch
+                    {
+                        // Ignore processes we cannot inspect.
+                    }
+                    finally
+                    {
+                        process.Dispose();
+                    }
                 }
             }
         }
@@ -391,6 +529,41 @@ internal sealed class AppLaunchWatcher : IDisposable
         foreach (var (displayName, launch) in ScanVisibleApps())
         {
             _visibleApps[displayName] = launch;
+        }
+    }
+
+    private void CaptureMacSeen()
+    {
+        foreach (var app in VisibleAppProbe.ListMacRegularApps())
+        {
+            Process? process = null;
+            try
+            {
+                process = Process.GetProcessById(app.ProcessId);
+                var name = process.ProcessName;
+                if (string.IsNullOrWhiteSpace(name) || IsIgnored(name) || IsIgnored(app.Name))
+                {
+                    continue;
+                }
+
+                _seen.Add(name);
+                if (TryResolveVisible(process, name, app.Name, out var launch))
+                {
+                    _tracked[name] = launch;
+                }
+            }
+            catch
+            {
+                if (!string.IsNullOrWhiteSpace(app.Name) && !IsIgnored(app.Name))
+                {
+                    _seen.Add(app.Name);
+                    _tracked[app.Name] = new AppLaunch(TrimDisplay(app.Name), AppKind.Generic, app.Name, app.ProcessId);
+                }
+            }
+            finally
+            {
+                process?.Dispose();
+            }
         }
     }
 
@@ -414,6 +587,7 @@ internal sealed class AppLaunchWatcher : IDisposable
     {
         if (Catalog.TryGetValue(processName, out launch))
         {
+            launch = launch with { ProcessId = process.Id };
             return true;
         }
 
@@ -437,7 +611,7 @@ internal sealed class AppLaunchWatcher : IDisposable
         }
 
         var display = ReadDisplayName(process, processName);
-        launch = new AppLaunch(display, AppKind.Generic, processName);
+        launch = new AppLaunch(display, AppKind.Generic, processName, process.Id);
         return true;
     }
 
@@ -534,7 +708,52 @@ internal sealed class AppLaunchWatcher : IDisposable
             ("Figma", "Figma", AppKind.Code),
             ("Photoshop", "Photoshop", AppKind.Office),
             ("Illustrator", "Illustrator", AppKind.Office),
-            ("blender", "Blender", AppKind.Office)
+            ("blender", "Blender", AppKind.Office),
+            ("Safari", "Safari", AppKind.Browser),
+            ("Google Chrome", "Chrome", AppKind.Browser),
+            ("Microsoft Edge", "Edge", AppKind.Browser),
+            ("Brave Browser", "Brave", AppKind.Browser),
+            ("Arc", "Arc", AppKind.Browser),
+            ("Terminal", "終端機", AppKind.Terminal),
+            ("iTerm2", "iTerm", AppKind.Terminal),
+            ("iTerm", "iTerm", AppKind.Terminal),
+            ("Warp", "Warp", AppKind.Terminal),
+            ("Alacritty", "Alacritty", AppKind.Terminal),
+            ("kitty", "kitty", AppKind.Terminal),
+            ("Ghostty", "Ghostty", AppKind.Terminal),
+            ("TextEdit", "文字編輯", AppKind.Note),
+            ("Notes", "備忘錄", AppKind.Note),
+            ("Preview", "預覽", AppKind.Office),
+            ("Finder", "Finder", AppKind.Utility),
+            ("Calculator", "計算機", AppKind.Utility),
+            ("Calendar", "行事曆", AppKind.Utility),
+            ("Reminders", "提醒事項", AppKind.Utility),
+            ("Mail", "郵件", AppKind.Chat),
+            ("Messages", "訊息", AppKind.Chat),
+            ("FaceTime", "FaceTime", AppKind.Chat),
+            ("Music", "音樂", AppKind.Music),
+            ("TV", "TV", AppKind.Video),
+            ("QuickTime Player", "QuickTime", AppKind.Video),
+            ("IINA", "IINA", AppKind.Video),
+            ("Movist Pro", "Movist Pro", AppKind.Video),
+            ("Xcode", "Xcode", AppKind.Code),
+            ("Simulator", "Simulator", AppKind.Code),
+            ("Zed", "Zed", AppKind.Code),
+            ("Windsurf", "Windsurf", AppKind.Code),
+            ("Grok", "Grok", AppKind.Code),
+            ("System Settings", "系統設定", AppKind.Utility),
+            ("System Preferences", "系統偏好設定", AppKind.Utility),
+            ("Activity Monitor", "活動監視器", AppKind.Utility),
+            ("App Store", "App Store", AppKind.Utility),
+            ("Freeform", "無邊記", AppKind.Note),
+            ("Pages", "Pages", AppKind.Office),
+            ("Numbers", "Numbers", AppKind.Office),
+            ("Keynote", "Keynote", AppKind.Office),
+            ("Microsoft Word", "Word", AppKind.Office),
+            ("Microsoft Excel", "Excel", AppKind.Office),
+            ("Microsoft PowerPoint", "PowerPoint", AppKind.Office),
+            ("Microsoft Outlook", "Outlook", AppKind.Office),
+            ("Microsoft Teams", "Teams", AppKind.Chat)
         };
 
         var catalog = new Dictionary<string, AppLaunch>(StringComparer.OrdinalIgnoreCase);
@@ -547,7 +766,7 @@ internal sealed class AppLaunchWatcher : IDisposable
     }
 }
 
-internal readonly record struct AppLaunch(string DisplayName, AppKind Kind, string ProcessName);
+internal readonly record struct AppLaunch(string DisplayName, AppKind Kind, string ProcessName, int ProcessId = 0);
 
 internal readonly record struct AppWatchEvent(AppLaunch App, AppWatchAction Action);
 
