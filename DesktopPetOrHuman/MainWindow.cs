@@ -31,6 +31,8 @@ public sealed class MainWindow : Window
         new("Old Wang Cat 試產", "laowangmao_trial"),
         new("鋒兄", "fengxiong"),
         new("鋒兄試產", "fengxiong_trial"),
+        new("鋒哥", "fengge"),
+        new("鋒哥試產", "fengge_trial"),
         new("小英", "xiaoying"),
         new("小英試產", "xiaoying_trial"),
         new("喵娘", "miaoniang"),
