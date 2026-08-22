@@ -22,29 +22,17 @@ public sealed class MainWindow : Window
     private readonly CharacterDefinition[] _characters =
     [
         new("喵白白", "miaobaibai"),
-        new("喵白白試產", "miaobaibai_trial"),
         new("喵布布", "miaobubu"),
-        new("喵布布試產", "miaobubu_trial"),
         new("小塗", "xiaotu"),
-        new("小塗試產", "xiaotu_trial"),
         new("Old Wang Cat", "laowangmao"),
-        new("Old Wang Cat 試產", "laowangmao_trial"),
         new("鋒兄", "fengxiong"),
-        new("鋒兄試產", "fengxiong_trial"),
         new("鋒哥", "fengge"),
-        new("鋒哥試產", "fengge_trial"),
         new("小英", "xiaoying"),
-        new("小英試產", "xiaoying_trial"),
         new("喵娘", "miaoniang"),
-        new("喵娘試產", "miaoniang_trial"),
         new("塗哥", "tuge"),
-        new("塗哥試產", "tuge_trial"),
         new("牙妹", "yamei"),
-        new("牙妹試產", "yamei_trial"),
         new("魚妹", "yumei"),
-        new("魚妹試產", "yumei_trial"),
-        new("ググガガ", "gugugaga"),
-        new("ググガガ試產", "gugugaga_trial")
+        new("ググガガ", "gugugaga")
     ];
     private Bitmap[] _moods = [];
     private CharacterDefinition _currentCharacter;
