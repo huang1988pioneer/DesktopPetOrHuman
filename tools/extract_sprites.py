@@ -41,11 +41,11 @@ SHEETS = [
         "小塗",
         "ChatGPT Image 2026年8月21日 下午07_16_07.png",
         (4, 3),
-        {"idle": (0, 0), "happy": (3, 1), "sleep": (2, 2)},
+        {"idle": (0, 0), "happy": (1065, 325, 1448, 750), "sleep": (2, 2)},
     ),
     CharacterSheet(
         "laowangmao",
-        "老王貓",
+        "Old Wang Cat",
         "ChatGPT Image 2026年8月22日 上午12_10_53.png",
         (4, 3),
         {"idle": (0, 0), "happy": (0, 1), "sleep": (2, 0)},
@@ -69,14 +69,14 @@ SHEETS = [
         "喵娘",
         "ChatGPT Image 2026年8月22日 上午12_19_17.png",
         (4, 3),
-        {"idle": (0, 0), "happy": (0, 1), "sleep": (1120, 370, 1530, 690)},
+        {"idle": (0, 0), "happy": (0, 1), "sleep": (1120, 355, 1530, 672)},
     ),
     CharacterSheet(
         "tuge",
         "塗哥",
         "ChatGPT Image 2026年8月22日 上午12_23_33.png",
         (4, 3),
-        {"idle": (0, 0), "happy": (3, 0), "sleep": (3, 2)},
+        {"idle": (0, 0), "happy": (940, 15, 1254, 380), "sleep": (3, 2)},
     ),
     CharacterSheet(
         "yamei",
@@ -94,7 +94,7 @@ SHEETS = [
     ),
     CharacterSheet(
         "gugugaga",
-        "咕咕嘎嘎",
+        "ググガガ",
         "ChatGPT Image 2026年8月22日 上午12_38_24.png",
         (4, 3),
         {"idle": (0, 0), "happy": (3, 0), "sleep": (0, 1)},
@@ -106,7 +106,7 @@ def near_background(pixel: tuple[int, int, int, int], transparent_sheet: bool) -
     r, g, b, a = pixel
     if a == 0:
         return True
-    if transparent_sheet and a < 250:
+    if transparent_sheet and a < 16:
         return True
     if r > 238 and g > 238 and b > 238:
         return True
@@ -152,6 +152,63 @@ def trim_alpha(image: Image.Image) -> Image.Image:
     return image.crop(bbox) if bbox else image
 
 
+def add_padding(image: Image.Image, padding: int = 12) -> Image.Image:
+    padded = Image.new("RGBA", (image.width + padding * 2, image.height + padding * 2), (0, 0, 0, 0))
+    padded.alpha_composite(image, (padding, padding))
+    return padded
+
+
+def remove_bottom_artifacts(image: Image.Image) -> Image.Image:
+    image = image.convert("RGBA")
+    width, height = image.size
+    pixels = image.load()
+    visited: set[tuple[int, int]] = set()
+    components: list[tuple[int, int, int, int, int, list[tuple[int, int]]]] = []
+
+    for start_y in range(height):
+        for start_x in range(width):
+            if (start_x, start_y) in visited or pixels[start_x, start_y][3] == 0:
+                continue
+
+            queue: deque[tuple[int, int]] = deque([(start_x, start_y)])
+            points: list[tuple[int, int]] = []
+            min_x = max_x = start_x
+            min_y = max_y = start_y
+
+            while queue:
+                x, y = queue.popleft()
+                if (x, y) in visited or not (0 <= x < width and 0 <= y < height):
+                    continue
+                visited.add((x, y))
+                if pixels[x, y][3] == 0:
+                    continue
+
+                points.append((x, y))
+                min_x = min(min_x, x)
+                max_x = max(max_x, x)
+                min_y = min(min_y, y)
+                max_y = max(max_y, y)
+                queue.extend(((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)))
+
+            components.append((len(points), min_x, min_y, max_x, max_y, points))
+
+    if not components:
+        return image
+
+    largest = max(component[0] for component in components)
+    for area, min_x, min_y, max_x, max_y, points in components:
+        component_width = max_x - min_x + 1
+        component_height = max_y - min_y + 1
+        is_low = min_y > height * 0.66
+        is_small = area < max(900, largest * 0.08)
+        is_shadow_shaped = component_width > component_height * 2 or area < 260
+        if is_low and is_small and is_shadow_shaped:
+            for x, y in points:
+                pixels[x, y] = (0, 0, 0, 0)
+
+    return image
+
+
 def crop_cell(sheet: Image.Image, columns: int, rows: int, cell: tuple[int, ...]) -> Image.Image:
     if len(cell) == 4:
         return sheet.crop(cell)
@@ -172,7 +229,7 @@ def save_sprite(sheet_config: CharacterSheet, mood: str, cell: tuple[int, ...]) 
     sheet = Image.open(SOURCE_DIR / sheet_config.source).convert("RGBA")
     sprite = crop_cell(sheet, *sheet_config.grid, cell)
     sprite = remove_background(sprite, sheet_config.transparent)
-    sprite = trim_alpha(sprite)
+    sprite = add_padding(trim_alpha(sprite))
     sprite.thumbnail((420, 420), Image.Resampling.LANCZOS)
     sprite.save(OUT / f"{sheet_config.key}_{mood}.png")
 

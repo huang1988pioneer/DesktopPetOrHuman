@@ -14,4 +14,4 @@ dotnet run --project DesktopPetOrHuman\DesktopPetOrHuman.csproj
 - Drag to move
 - Double-click for a happy reaction
 - Right-click menu for resize, sleep, reset, topmost toggle, and character switching
-- 11 selectable characters: 喵白白, 喵布布, 小塗, 老王貓, 鋒兄, 小英, 喵娘, 塗哥, 牙妹, 魚妹, 咕咕嘎嘎
+- 11 selectable characters: 喵白白, 喵布布, 小塗, Old Wang Cat, 鋒兄, 小英, 喵娘, 塗哥, 牙妹, 魚妹, ググガガ
