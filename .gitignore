@@ -1,0 +1,13 @@
+bin/
+obj/
+*.user
+*.suo
+*.rsuser
+.vs/
+.idea/
+.vscode/
+# Generated image workbench files; final selected sprites live in Assets/Characters.
+DesktopPetOrHuman/Assets/GeneratedTrial/Raw/
+DesktopPetOrHuman/Assets/GeneratedTrial/*_generated.png
+DesktopPetOrHuman/Assets/GeneratedTrial/*_cutout.png
+/dist/
