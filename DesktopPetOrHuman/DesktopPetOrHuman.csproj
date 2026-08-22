@@ -16,6 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="Assets\Characters\**" />
   </ItemGroup>
 </Project>
