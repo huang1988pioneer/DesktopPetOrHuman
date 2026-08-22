@@ -13,6 +13,14 @@ namespace DesktopPetOrHuman;
 
 public sealed class MainWindow : Window
 {
+    private const double MinWindowWidth = 150;
+    private const double MinWindowHeight = 180;
+    private const double MaxWindowWidth = 360;
+    private const double MaxWindowHeight = 420;
+    private const double MinPetSize = 115;
+    private const double MaxPetSize = 285;
+    private const int SizeStepCount = 5;
+
     private readonly Image _petImage;
     private readonly Border _bubble;
     private readonly TextBlock _bubbleText;
@@ -121,25 +129,20 @@ public sealed class MainWindow : Window
     ];
     private Bitmap[] _moods = [];
     private CharacterDefinition _currentCharacter;
+    private MenuItem? _biggerMenuItem;
+    private MenuItem? _smallerMenuItem;
+    private int _sizeStep;
     private int _idleTick;
     private bool _isDragging;
     private bool _farewellStarted;
     private bool _farewellDone;
 
-    private const double MinWindowWidth = 150;
-    private const double MaxWindowWidth = 360;
-    private const double MinWindowHeight = 180;
-    private const double MaxWindowHeight = 420;
-    private const double MinPetSize = 115;
-    private const double MaxPetSize = 285;
-
     public MainWindow()
     {
         var settings = AppSettings.Load();
         _currentCharacter = ResolveStartupCharacter(settings.LastCharacterKey);
+        _sizeStep = RestoreSizeStep(settings.PetSize);
 
-        Width = RestoreSize(settings.WindowWidth, MinWindowWidth, MaxWindowWidth, MaxWindowWidth);
-        Height = RestoreSize(settings.WindowHeight, MinWindowHeight, MaxWindowHeight, MaxWindowHeight);
         CanResize = false;
         ShowInTaskbar = false;
         Topmost = true;
@@ -154,8 +157,6 @@ public sealed class MainWindow : Window
         _petImage = new Image
         {
             Source = _moods[0],
-            Width = RestoreSize(settings.PetSize, MinPetSize, MaxPetSize, MaxPetSize),
-            Height = RestoreSize(settings.PetSize, MinPetSize, MaxPetSize, MaxPetSize),
             Stretch = Stretch.Uniform,
             RenderTransformOrigin = RelativePoint.Center,
             RenderTransform = new TransformGroup
@@ -167,6 +168,7 @@ public sealed class MainWindow : Window
                 }
             }
         };
+        ApplySizeStep();
 
         _bubbleText = new TextBlock
         {
@@ -245,11 +247,11 @@ public sealed class MainWindow : Window
             stayOnTop.Header = Topmost ? "取消置頂" : "保持置頂";
         };
 
-        var bigger = new MenuItem { Header = "變大" };
-        bigger.Click += (_, _) => ResizePet(1.12);
+        _biggerMenuItem = new MenuItem { Header = "變大" };
+        _biggerMenuItem.Click += (_, _) => ResizePet(1);
 
-        var smaller = new MenuItem { Header = "變小" };
-        smaller.Click += (_, _) => ResizePet(0.9);
+        _smallerMenuItem = new MenuItem { Header = "變小" };
+        _smallerMenuItem.Click += (_, _) => ResizePet(-1);
 
         var sleep = new MenuItem { Header = "睡一下" };
         sleep.Click += (_, _) => SetMood(2, _currentCharacter.Sleep);
@@ -268,13 +270,13 @@ public sealed class MainWindow : Window
         var quit = new MenuItem { Header = "離開" };
         quit.Click += (_, _) => Close();
 
-        return new ContextMenu
+        var menu = new ContextMenu
         {
             ItemsSource = new object[]
             {
                 stayOnTop,
-                bigger,
-                smaller,
+                _biggerMenuItem,
+                _smallerMenuItem,
                 sleep,
                 characters,
                 reset,
@@ -282,6 +284,9 @@ public sealed class MainWindow : Window
                 quit
             }
         };
+
+        UpdateResizeMenuState();
+        return menu;
     }
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -387,14 +392,38 @@ public sealed class MainWindow : Window
         _bubble.IsVisible = false;
     }
 
-    private void ResizePet(double factor)
+    private void ResizePet(int stepDelta)
     {
-        Width = Math.Clamp(Width * factor, MinWindowWidth, MaxWindowWidth);
-        Height = Math.Clamp(Height * factor, MinWindowHeight, MaxWindowHeight);
-        _petImage.Width = Math.Clamp(_petImage.Width * factor, MinPetSize, MaxPetSize);
-        _petImage.Height = Math.Clamp(_petImage.Height * factor, MinPetSize, MaxPetSize);
+        _sizeStep = Math.Clamp(_sizeStep + stepDelta, 0, SizeStepCount - 1);
+        ApplySizeStep();
         KeepInsideScreen();
+        UpdateResizeMenuState();
         AppSettings.SaveLastSize(Width, Height, _petImage.Width);
+    }
+
+    private void ApplySizeStep()
+    {
+        var progress = (double)_sizeStep / (SizeStepCount - 1);
+        Width = Lerp(MinWindowWidth, MaxWindowWidth, progress);
+        Height = Lerp(MinWindowHeight, MaxWindowHeight, progress);
+        _petImage.Width = Lerp(MinPetSize, MaxPetSize, progress);
+        _petImage.Height = Lerp(MinPetSize, MaxPetSize, progress);
+    }
+
+    private static double Lerp(double start, double end, double progress)
+    {
+        return start + (end - start) * progress;
+    }
+
+    private void UpdateResizeMenuState()
+    {
+        if (_biggerMenuItem is null || _smallerMenuItem is null)
+        {
+            return;
+        }
+
+        _biggerMenuItem.IsEnabled = _sizeStep < SizeStepCount - 1;
+        _smallerMenuItem.IsEnabled = _sizeStep > 0;
     }
 
     private void MoveToLowerRight()
@@ -429,14 +458,28 @@ public sealed class MainWindow : Window
 
     private int WindowPixelHeight => Math.Max(1, (int)Math.Ceiling(Bounds.Height * RenderScaling));
 
-    private static double RestoreSize(double? saved, double min, double max, double fallback)
+    private static int RestoreSizeStep(double? savedPetSize)
     {
-        if (saved is not double value || double.IsNaN(value) || double.IsInfinity(value))
+        if (savedPetSize is not double value || double.IsNaN(value) || double.IsInfinity(value))
         {
-            return fallback;
+            return SizeStepCount - 1;
         }
 
-        return Math.Clamp(value, min, max);
+        var clamped = Math.Clamp(value, MinPetSize, MaxPetSize);
+        var bestStep = SizeStepCount - 1;
+        var bestDistance = double.MaxValue;
+        for (var i = 0; i < SizeStepCount; i++)
+        {
+            var petSize = Lerp(MinPetSize, MaxPetSize, (double)i / (SizeStepCount - 1));
+            var distance = Math.Abs(petSize - clamped);
+            if (distance < bestDistance)
+            {
+                bestDistance = distance;
+                bestStep = i;
+            }
+        }
+
+        return bestStep;
     }
 
     private CharacterDefinition ResolveStartupCharacter(string? savedKey)
