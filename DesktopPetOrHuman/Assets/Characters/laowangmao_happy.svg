@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Editable vector artwork. Source: tools/draw_characters.py -->
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" role="img" aria-labelledby="title">
+  <title id="title">Old Wang Cat · 開心</title>
+  <desc>Original SVG redraw of the project character reference. Transparent background; all visible artwork is vector geometry.</desc>
+  <g stroke="#3e333c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <g id="body">
+    <path d="M199 229 Q239 239 243 208 Q243 191 255 196 Q272 229 245 248 Q224 262 200 249" fill="#bf9a83"/>
+    <path d="M129 186 Q113 202 112 235 Q105 263 130 272 Q159 282 192 271 Q214 263 207 236 Q207 201 190 186Z" fill="#fff9ee"/>
+    <path d="M190 224 Q215 224 203 256 L185 254Z" fill="#bf9a83" stroke="none"/>
+    <ellipse cx="133" cy="269" rx="15" ry="16" fill="#fff9ee" stroke-width="2.8"/>
+    <path d="M128 275 v5 M136 275 v5" fill="none" stroke="#c6aea2" stroke-width="1.8"/>
+    <ellipse cx="186" cy="269" rx="15" ry="16" fill="#fff9ee" stroke-width="2.8"/>
+    <path d="M181 275 v5 M189 275 v5" fill="none" stroke="#c6aea2" stroke-width="1.8"/>
+    </g>
+    <g id="head" transform="rotate(-4 160 140)">
+    <path d="M98 102 Q77 75 81 42 Q111 43 131 77 M189 77 Q212 43 239 42 Q242 77 221 104" fill="#be9b87"/>
+    <path d="M94 87 Q89 66 90 56 Q111 63 119 79Z M204 79 Q224 57 231 56 Q231 77 223 91Z" fill="#eaa2a2" stroke-width="2.3"/>
+    <path d="M95 130 Q93 79 158 77 Q224 76 225 130 L233 148 L226 153 L232 163 Q214 195 160 201 Q105 196 88 163 L95 153 L87 148Z" fill="#fbf6eb"/>
+    <path d="M168 79 Q201 76 218 101 L220 123 Q197 142 185 114 Q174 105 168 79Z" fill="#be9b87" stroke="none"/>
+    <ellipse cx="126" cy="109" rx="8" ry="4" fill="#be9b87" stroke="none" transform="rotate(-15 126 109)"/>
+    <g id="expression">
+    <path d="M124 144 Q136 128 148 144" fill="none" stroke-width="4"/>
+    <path d="M172 144 Q184 128 196 144" fill="none" stroke-width="4"/>
+    <ellipse cx="119" cy="162" rx="10" ry="5" fill="#ed9a9c" stroke="none" opacity=".58"/>
+    <ellipse cx="201" cy="162" rx="10" ry="5" fill="#ed9a9c" stroke="none" opacity=".58"/>
+    <path d="M154 158 Q160 154 166 158 L160 164Z" fill="#dd8d93" stroke-width="1.8"/>
+    <path d="M149 169 Q160 174 171 169 Q169 185 160 185 Q151 185 149 169Z" fill="#a95164" stroke-width="2"/>
+    <path d="M154 180 Q161 175 167 181" fill="none" stroke="#f4a6af" stroke-width="4"/>
+    <path d="M111 160 l-17 -4 M111 167 l-15 2 M209 160 l17 -4 M209 167 l15 2" fill="none" stroke="#9d8582" stroke-width="2"/>
+    </g>
+    </g>
+    <g id="accessories">
+    <path d="M120 190 Q160 207 201 190" fill="none" stroke="#bd6056" stroke-width="12"/>
+    <path d="M127 191 l6 8 M148 198 l5 6 M173 198 l5 5 M194 192 l4 6" fill="none" stroke="#fff9ee" stroke-width="6"/>
+    <g transform="translate(160 207) scale(0.82)" stroke-width="2.4">
+    <path d="M0 0 Q-10 -12 -20 -9 Q-23 0 -19 10 Q-9 9 0 0Z" fill="#cf675f"/>
+    <path d="M0 0 Q10 -12 20 -9 Q23 0 19 10 Q9 9 0 0Z" fill="#cf675f"/>
+    <path d="M-4 2 L-10 21 L0 15 L9 22 L5 2" fill="#cf675f"/>
+    <circle cx="0" cy="0" r="5" fill="#cf675f"/>
+    </g>
+    <g transform="translate(163 241) scale(0.95)" stroke="#9b6935" stroke-width="2.5">
+    <path d="M-30 -8 Q0 8 30 -8 L21 11 Q0 23 -21 11Z" fill="#efb94e"/>
+    <ellipse cx="0" cy="-4" rx="17" ry="12" fill="#f9d974"/>
+    <path d="M-10 -8 Q0 -16 9 -9" fill="none" stroke="#fff3bd" stroke-width="4"/>
+    </g>
+    <path d="M116 211 Q95 199 82 173 M201 209 Q224 192 238 172" fill="none" stroke="#3e333c" stroke-width="24"/>
+    <path d="M116 211 Q95 199 82 173 M201 209 Q224 192 238 172" fill="none" stroke="#fff9ee" stroke-width="18"/>
+    <ellipse cx="80" cy="164" rx="15" ry="16" fill="#fff9ee" stroke-width="2.8"/>
+    <ellipse cx="80" cy="168" rx="6.5" ry="5.5" fill="#e7a0a3" stroke="none"/>
+    <circle cx="72" cy="160" r="2.7" fill="#e7a0a3" stroke="none"/>
+    <circle cx="80" cy="156" r="2.7" fill="#e7a0a3" stroke="none"/>
+    <circle cx="88" cy="160" r="2.7" fill="#e7a0a3" stroke="none"/>
+    <ellipse cx="239" cy="163" rx="15" ry="16" fill="#fff9ee" stroke-width="2.8"/>
+    <ellipse cx="239" cy="167" rx="6.5" ry="5.5" fill="#e7a0a3" stroke="none"/>
+    <circle cx="231" cy="159" r="2.7" fill="#e7a0a3" stroke="none"/>
+    <circle cx="239" cy="155" r="2.7" fill="#e7a0a3" stroke="none"/>
+    <circle cx="247" cy="159" r="2.7" fill="#e7a0a3" stroke="none"/>
+    </g>
+    <g id="mood-marks">
+    <g transform="translate(49 87) scale(1.1)" stroke="none">
+    <path d="M0 -12 Q3 -3 10 0 Q3 3 0 12 Q-3 3 -10 0 Q-3 -3 0 -12Z" fill="#f4bd57"/>
+    </g>
+    <g transform="translate(265 106) scale(0.8)" stroke="none">
+    <path d="M0 -12 Q3 -3 10 0 Q3 3 0 12 Q-3 3 -10 0 Q-3 -3 0 -12Z" fill="#f4bd57"/>
+    </g>
+    <g transform="translate(245 61) scale(0.5)" stroke="none">
+    <path d="M0 -12 Q3 -3 10 0 Q3 3 0 12 Q-3 3 -10 0 Q-3 -3 0 -12Z" fill="#e58d8c"/>
+    </g>
+    <path d="M60 115 L66 119 M251 144 L258 138" fill="none" stroke="#eaa266" stroke-width="4"/>
+    </g>
+    <g transform="translate(66 80) scale(0.45)" stroke="#9b6935" stroke-width="2.5">
+    <path d="M-30 -8 Q0 8 30 -8 L21 11 Q0 23 -21 11Z" fill="#efb94e"/>
+    <ellipse cx="0" cy="-4" rx="17" ry="12" fill="#f9d974"/>
+    <path d="M-10 -8 Q0 -16 9 -9" fill="none" stroke="#fff3bd" stroke-width="4"/>
+    </g>
+    <g transform="translate(264 91) scale(0.42)" stroke="#9b6935" stroke-width="2.5">
+    <path d="M-30 -8 Q0 8 30 -8 L21 11 Q0 23 -21 11Z" fill="#efb94e"/>
+    <ellipse cx="0" cy="-4" rx="17" ry="12" fill="#f9d974"/>
+    <path d="M-10 -8 Q0 -16 9 -9" fill="none" stroke="#fff3bd" stroke-width="4"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Editable vector artwork. Source: tools/draw_characters.py -->
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" role="img" aria-labelledby="title">
+  <title id="title">ググガガ · 睡眠</title>
+  <desc>Original SVG redraw of the project character reference. Transparent background; all visible artwork is vector geometry.</desc>
+  <g stroke="#3e333c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <g id="penguin-body">
+    <path d="M107 226 Q153 194 221 201 Q253 205 264 232 L283 246 L256 249 Q249 273 212 280 L105 279Z" fill="#4c4657"/>
+    <path d="M187 248 Q211 236 224 257 L232 276 L166 281Z" fill="#fbf5e7" stroke-width="2.6"/>
+    <path d="M255 252 l12 8 l-19 7" fill="#eebc55" stroke-width="2.5"/>
+    </g>
+    <g id="hooded-head" transform="translate(-18 78) rotate(-13 160 137) scale(.94)">
+    <path d="M82 135 Q80 67 155 58 Q228 55 237 130 L239 173 Q229 204 159 207 Q88 201 79 172Z" fill="#4c4657"/>
+    <path d="M97 113 Q113 75 158 74 Q201 72 222 109" fill="none" stroke="#70667a" stroke-width="5"/>
+    <path d="M98 154 Q95 106 159 105 Q221 105 221 152 Q218 190 160 196 Q104 190 98 154Z" fill="#ffdbb7"/>
+    <path d="M100 156 L96 139 Q105 105 158 103 Q206 102 221 137 L222 168 L211 155 L209 136 L195 132 L196 141 L180 138 L179 130 L162 131 L161 142 L146 141 L145 132 L129 136 L128 146 L114 146 L111 171Z" fill="#53404a" stroke-width="2.5"/>
+    <path d="M115 127 Q138 114 159 117 M180 118 q17 1 27 9" fill="none" stroke="#8c6570" stroke-width="3"/>
+    <g id="expression">
+    <path d="M124 145 Q136 155 148 144" fill="none" stroke-width="3.4"/>
+    <path d="M127 149 l-2 3" fill="none" stroke-width="2"/>
+    <path d="M172 145 Q184 155 196 144" fill="none" stroke-width="3.4"/>
+    <path d="M175 149 l-2 3" fill="none" stroke-width="2"/>
+    <ellipse cx="119" cy="162" rx="10" ry="5" fill="#ed9a9c" stroke="none" opacity=".58"/>
+    <ellipse cx="201" cy="162" rx="10" ry="5" fill="#ed9a9c" stroke="none" opacity=".58"/>
+    <path d="M158 155 q-2 5 3 5" fill="none" stroke="#d39a7d" stroke-width="1.8"/>
+    <path d="M155 173 q5 4 10 0" fill="none" stroke-width="2.2"/>
+    </g>
+    <ellipse cx="133" cy="91" rx="7" ry="9" fill="#fff9ee" stroke-width="2.2"/>
+    <ellipse cx="186" cy="91" rx="7" ry="9" fill="#fff9ee" stroke-width="2.2"/>
+    <circle cx="134" cy="92" r="3" fill="#3e333c" stroke="none"/>
+    <circle cx="185" cy="92" r="3" fill="#3e333c" stroke="none"/>
+    <path d="M141 111 L159 97 L179 111 Q161 118 141 111Z" fill="#f1c65c" stroke-width="2.5"/>
+    <path d="M148 109 l11 -7 l9 6" fill="none" stroke="#ffe6a3" stroke-width="2"/>
+    <path d="M101 128 l8 5 M99 135 l8 5" fill="none" stroke="#edb4b4" stroke-width="2.5"/>
+    </g>
+    <ellipse cx="98" cy="277" rx="15" ry="16" fill="#fff9ee" stroke-width="2.8"/>
+    <path d="M93 283 v5 M101 283 v5" fill="none" stroke="#c6aea2" stroke-width="1.8"/>
+    <ellipse cx="126" cy="278" rx="15" ry="16" fill="#fff9ee" stroke-width="2.8"/>
+    <path d="M121 284 v5 M129 284 v5" fill="none" stroke="#c6aea2" stroke-width="1.8"/>
+    <g id="mood-marks">
+    <g stroke="#799bb1" stroke-width="3.8">
+    <path d="M229 91 H242 L230 105 H243" fill="none"/>
+    <path d="M247 64 H264 L248 82 H265" fill="none"/>
+    <path d="M265 32 H286 L267 54 H288" fill="none"/>
+    </g>
+    </g>
+  </g>
+</svg>

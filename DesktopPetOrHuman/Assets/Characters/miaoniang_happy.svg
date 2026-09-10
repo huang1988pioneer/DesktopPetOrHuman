@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Editable vector artwork. Source: tools/draw_characters.py -->
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" role="img" aria-labelledby="title">
+  <title id="title">喵娘 · 開心</title>
+  <desc>Original SVG redraw of the project character reference. Transparent background; all visible artwork is vector geometry.</desc>
+  <g stroke="#3e333c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <g id="back-hair" transform="rotate(-3 160 140)">
+    <path d="M103 108 Q83 145 92 179 L87 192 Q116 202 128 187 L196 185 Q215 199 234 188 L226 172 Q235 139 216 107Z" fill="#d8d9dc"/>
+    </g>
+    <g id="tail">
+    <path d="M199 233 Q233 250 246 225 Q256 207 247 203 Q237 198 234 217 Q231 231 211 219" fill="#e4a45f"/>
+    <path d="M240 209 Q246 211 248 215 M233 226 l8 7" fill="none" stroke="#534b52" stroke-width="7"/>
+    </g>
+    <g id="body">
+    <g transform="rotate(-15 141 247)">
+    <path d="M132 238 v29 q9 8 18 0 v-29" fill="#ffdbb7" stroke-width="2.6"/>
+    <path d="M129 269 Q120 276 124 282 Q141 287 154 282 L153 268Z" fill="#fff9ee" stroke-width="2.8"/>
+    <path d="M131 275 h9" fill="none" stroke="#77727b" stroke-width="2"/>
+    </g>
+    <g transform="rotate(22 178 247)">
+    <path d="M169 238 v29 q9 8 18 0 v-29" fill="#ffdbb7" stroke-width="2.6"/>
+    <path d="M166 269 Q157 276 161 282 Q178 287 191 282 L190 268Z" fill="#fff9ee" stroke-width="2.8"/>
+    <path d="M168 275 h9" fill="none" stroke="#77727b" stroke-width="2"/>
+    </g>
+    <g >
+    <path d="M134 192 Q117 190 102 169 L84 152 L74 166 Q91 199 121 216Z" fill="#fff9ee"/>
+    <path d="M84 155 L97 171" fill="none" stroke="#fff8ee" opacity=".4" stroke-width="3"/>
+    <ellipse cx="76" cy="151" rx="8.5" ry="10" fill="#ffdbb7" stroke-width="2.6"/>
+    <path d="M72 148 l2 4 M77 146 l2 4" fill="none" stroke="#cd947e" stroke-width="1.6"/>
+    </g>
+    <g transform="translate(320 0) scale(-1 1)">
+    <path d="M134 192 Q117 190 102 169 L84 152 L74 166 Q91 199 121 216Z" fill="#fff9ee"/>
+    <path d="M84 155 L97 171" fill="none" stroke="#fff8ee" opacity=".4" stroke-width="3"/>
+    <ellipse cx="76" cy="151" rx="8.5" ry="10" fill="#ffdbb7" stroke-width="2.6"/>
+    <path d="M72 148 l2 4 M77 146 l2 4" fill="none" stroke="#cd947e" stroke-width="1.6"/>
+    </g>
+    <path d="M144 181 L142 195 Q160 206 178 195 L176 181Z" fill="#ffdbb7" stroke-width="2.5"/>
+    <path d="M133 189 L146 195 Q160 203 174 195 L187 189 Q197 207 198 235 Q162 247 121 235 Q122 208 133 189Z" fill="#fff9ee"/>
+    <path d="M126 224 Q160 235 196 224 L198 235 Q160 247 121 235Z" fill="#3e333c" stroke="none" opacity=".09"/>
+    <path d="M139 193 Q130 208 144 215 M180 193 Q190 208 177 215 M160 202 v35" fill="none" stroke="#c7bdb2" stroke-width="2"/>
+    <path d="M137 215 v11 M181 215 v11" fill="none" stroke="#9f9290" stroke-width="2"/>
+    <path d="M128 222 Q136 212 143 224 L142 239 L122 235Z" fill="#dfaa64" stroke="none"/>
+    <path d="M191 207 Q178 207 179 219 Q186 225 196 219Z" fill="#575159" stroke="none"/>
+    </g>
+    <g id="head" transform="rotate(-3 160 140)">
+    <path d="M94 99 Q77 70 82 42 Q112 42 129 73 M190 74 Q214 43 238 42 Q241 74 226 106" fill="#fff9ee"/>
+    <path d="M90 55 Q108 60 116 78 L95 90Z" fill="#e8a4a0" stroke="none"/>
+    <path d="M210 75 Q223 53 231 51 L227 88Z" fill="#e8a4a0" stroke="none"/>
+    <path d="M97 111 Q86 71 116 59 L131 71Z" fill="#58505a" stroke="none"/>
+    <path d="M190 74 Q206 59 225 64 L221 97Z" fill="#e3a253" stroke="none"/>
+    <path d="M89 128 Q88 69 158 61 Q225 62 235 121 L232 159 Q226 193 195 193 H124 Q88 187 89 128Z" fill="#fff9ee"/>
+    <path d="M102 129 Q100 79 157 77 Q216 78 222 131 L217 159 Q207 184 160 190 Q111 183 101 158Z" fill="#d8d9dc" stroke="#c0b7b4" stroke-width="2.6"/>
+    <ellipse cx="95" cy="145" rx="12" ry="16" fill="#ffdbb7" stroke-width="2.8"/>
+    <ellipse cx="225" cy="145" rx="12" ry="16" fill="#ffdbb7" stroke-width="2.8"/>
+    <path d="M92 140 q8 -3 8 8 M227 139 q-8 -2 -8 8" fill="none" stroke="#d8a07f" stroke-width="2"/>
+    <path d="M96 127 Q96 73 159 73 Q224 75 224 130 L222 155 Q217 191 160 197 Q105 191 98 158Z" fill="#ffdbb7"/>
+    <path d="M101 158 Q114 184 160 187 Q204 184 220 157 Q212 192 160 197 Q111 190 101 158Z" fill="#efbc98" stroke="none" opacity=".7"/>
+    <path d="M103 137 Q96 88 142 83 Q193 69 218 113 L219 145 L207 123 L199 109 L197 132 Q179 123 171 101 Q164 117 147 127 L149 104 Q130 133 118 136 L122 111Z" fill="#d8d9dc" stroke-width="2.5"/>
+    <path d="M151 86 Q169 80 180 85 L188 115 Q172 108 169 96 L164 114Z" fill="#df9a57" stroke="none"/>
+    <path d="M121 99 Q126 89 139 88 M190 93 l11 9" fill="none" stroke="#fbf6eb" stroke-width="4"/>
+    <g id="expression">
+    <path d="M124 144 Q136 128 148 144" fill="none" stroke-width="4"/>
+    <path d="M172 144 Q184 128 196 144" fill="none" stroke-width="4"/>
+    <ellipse cx="119" cy="162" rx="10" ry="5" fill="#ed9a9c" stroke="none" opacity=".58"/>
+    <ellipse cx="201" cy="162" rx="10" ry="5" fill="#ed9a9c" stroke="none" opacity=".58"/>
+    <path d="M158 155 q-2 5 3 5" fill="none" stroke="#d39a7d" stroke-width="1.8"/>
+    <path d="M146 170 Q160 175 174 170 Q172 189 160 189 Q148 189 146 170Z" fill="#864953" stroke-width="2.4"/>
+    <path d="M151 182 Q160 177 169 182 Q160 192 151 182Z" fill="#ee9aa5" stroke="none"/>
+    <path d="M149 171 Q160 175 171 171" fill="none" stroke="#fff9ee" stroke-width="3"/>
+    </g>
+    </g>
+    <g id="mood-marks">
+    <g transform="translate(49 87) scale(1.1)" stroke="none">
+    <path d="M0 -12 Q3 -3 10 0 Q3 3 0 12 Q-3 3 -10 0 Q-3 -3 0 -12Z" fill="#f4bd57"/>
+    </g>
+    <g transform="translate(265 106) scale(0.8)" stroke="none">
+    <path d="M0 -12 Q3 -3 10 0 Q3 3 0 12 Q-3 3 -10 0 Q-3 -3 0 -12Z" fill="#f4bd57"/>
+    </g>
+    <g transform="translate(245 61) scale(0.5)" stroke="none">
+    <path d="M0 -12 Q3 -3 10 0 Q3 3 0 12 Q-3 3 -10 0 Q-3 -3 0 -12Z" fill="#e58d8c"/>
+    </g>
+    <path d="M60 115 L66 119 M251 144 L258 138" fill="none" stroke="#eaa266" stroke-width="4"/>
+    </g>
+  </g>
+</svg>

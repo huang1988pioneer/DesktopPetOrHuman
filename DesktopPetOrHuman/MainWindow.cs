@@ -1,12 +1,9 @@
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Avalonia.Threading;
 
 namespace DesktopPetOrHuman;
@@ -127,7 +124,8 @@ public sealed class MainWindow : Window
             "ググ…ペンギン寝る",
             ["ググガガ", "今天也要滑行", "肚子想吃魚"])
     ];
-    private Bitmap[] _moods = [];
+    private readonly Dictionary<string, IImage[]> _artworkCache = new();
+    private IImage[] _moods = [];
     private CharacterDefinition _currentCharacter;
     private MenuItem? _biggerMenuItem;
     private MenuItem? _smallerMenuItem;
@@ -225,17 +223,6 @@ public sealed class MainWindow : Window
 
         _bubbleTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2.4) };
         _bubbleTimer.Tick += (_, _) => HideBubble();
-    }
-
-    private static Bitmap LoadAsset(string fileName)
-    {
-        var uri = new Uri($"avares://DesktopPetOrHuman/Assets/{fileName}");
-        return new Bitmap(AssetLoader.Open(uri));
-    }
-
-    private static Bitmap LoadCharacterAsset(string key, string mood)
-    {
-        return LoadAsset($"Characters/{key}_{mood}.png");
     }
 
     private ContextMenu BuildMenu()
@@ -509,12 +496,18 @@ public sealed class MainWindow : Window
 
     private void LoadCharacter(CharacterDefinition character)
     {
-        _moods =
-        [
-            LoadCharacterAsset(character.Key, "idle"),
-            LoadCharacterAsset(character.Key, "happy"),
-            LoadCharacterAsset(character.Key, "sleep")
-        ];
+        if (!_artworkCache.TryGetValue(character.Key, out var moods))
+        {
+            moods =
+            [
+                CharacterArtwork.Load(character.Key, "idle"),
+                CharacterArtwork.Load(character.Key, "happy"),
+                CharacterArtwork.Load(character.Key, "sleep")
+            ];
+            _artworkCache.Add(character.Key, moods);
+        }
+
+        _moods = moods;
     }
 
     private readonly record struct CharacterDefinition(

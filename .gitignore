@@ -11,3 +11,5 @@ DesktopPetOrHuman/Assets/GeneratedTrial/Raw/
 DesktopPetOrHuman/Assets/GeneratedTrial/*_generated.png
 DesktopPetOrHuman/Assets/GeneratedTrial/*_cutout.png
 /dist/
+/artifacts/
+__pycache__/

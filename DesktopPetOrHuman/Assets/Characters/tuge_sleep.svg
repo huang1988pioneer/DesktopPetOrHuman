@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Editable vector artwork. Source: tools/draw_characters.py -->
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" role="img" aria-labelledby="title">
+  <title id="title">塗哥 · 睡眠</title>
+  <desc>Original SVG redraw of the project character reference. Transparent background; all visible artwork is vector geometry.</desc>
+  <g stroke="#3e333c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <g id="back-hair" transform="translate(-5 28) rotate(12 160 140)">
+    </g>
+    <g id="body">
+    <path d="M100 273 Q83 284 105 291 Q157 303 218 287 Q235 278 215 267Z" fill="#c5dbe2" stroke="#80969f" stroke-width="2.4"/>
+    <path d="M130 233 Q102 235 105 260 Q124 281 164 275 L169 252Z" fill="#738160"/>
+    <path d="M185 234 Q217 238 212 260 Q195 278 156 269 L150 250Z" fill="#738160"/>
+    <path d="M125 263 Q116 270 120 276 Q137 281 150 276 L149 262Z" fill="#f4ece2" stroke-width="2.8"/>
+    <path d="M121 274 Q137 278 148 274" fill="none" stroke="#fff9ee" stroke-width="3.4"/>
+    <path d="M129 266 h10" fill="none" stroke="#fff9ee" stroke-width="2"/>
+    <path d="M175 263 Q166 270 170 276 Q187 281 200 276 L199 262Z" fill="#f4ece2" stroke-width="2.8"/>
+    <path d="M171 274 Q187 278 198 274" fill="none" stroke="#fff9ee" stroke-width="3.4"/>
+    <path d="M179 266 h10" fill="none" stroke="#fff9ee" stroke-width="2"/>
+    <g >
+    <path d="M133 195 Q113 197 109 221 L120 232 L142 213Z" fill="#f28e3d"/>
+    </g>
+    <g transform="translate(320 0) scale(-1 1)">
+    <path d="M133 195 Q113 197 109 221 L120 232 L142 213Z" fill="#f28e3d"/>
+    </g>
+    <path d="M144 181 L142 195 Q160 206 178 195 L176 181Z" fill="#ffdbb7" stroke-width="2.5"/>
+    <path d="M133 189 L146 195 Q160 203 174 195 L187 189 Q197 207 198 235 Q162 247 121 235 Q122 208 133 189Z" fill="#f28e3d"/>
+    <path d="M126 224 Q160 235 196 224 L198 235 Q160 247 121 235Z" fill="#3e333c" stroke="none" opacity=".09"/>
+    <path d="M145 194 Q160 206 176 194" fill="none" stroke="#49464b" stroke-width="2"/>
+    <path d="M135 224 q25 5 49 0" fill="none" stroke="#fff8ed" opacity=".3" stroke-width="2"/>
+    <rect x="142" y="210" width="36" height="12" rx="2" fill="#fff4d6" stroke-width="1.5"/>
+    <path d="M162 211 l-7 6 h5 l-2 5 l9 -7 h-6Z" fill="#b06b38" stroke="none"/>
+    <path d="M112 226 Q128 246 151 246 M207 225 Q193 244 173 245" fill="none" stroke="#f28e3d" stroke-width="12"/>
+    <ellipse cx="151" cy="244" rx="8.5" ry="10" fill="#ffdbb7" stroke-width="2.6"/>
+    <ellipse cx="175" cy="244" rx="8.5" ry="10" fill="#ffdbb7" stroke-width="2.6"/>
+    <path d="M147 238 H174 L171 261 Q160 267 151 261Z" fill="#faf0df" stroke-width="2.4"/>
+    <path d="M174 242 Q187 239 183 251 Q181 255 173 253" fill="none" stroke="#806d66" stroke-width="3"/>
+    <ellipse cx="160.5" cy="238" rx="13" ry="4" fill="#765747" stroke-width="2"/>
+    </g>
+    <g id="head" transform="translate(-5 28) rotate(12 160 140)">
+    <ellipse cx="95" cy="145" rx="12" ry="16" fill="#ffdbb7" stroke-width="2.8"/>
+    <ellipse cx="225" cy="145" rx="12" ry="16" fill="#ffdbb7" stroke-width="2.8"/>
+    <path d="M92 140 q8 -3 8 8 M227 139 q-8 -2 -8 8" fill="none" stroke="#d8a07f" stroke-width="2"/>
+    <path d="M96 127 Q96 73 159 73 Q224 75 224 130 L222 155 Q217 191 160 197 Q105 191 98 158Z" fill="#ffdbb7"/>
+    <path d="M101 158 Q114 184 160 187 Q204 184 220 157 Q212 192 160 197 Q111 190 101 158Z" fill="#efbc98" stroke="none" opacity=".7"/>
+    <path d="M95 153 L89 125 L85 132 L88 105 L80 107 L94 87 L90 82 L114 73 L111 65 L137 64 L141 55 L159 61 L175 54 L185 64 L203 61 L207 71 L226 80 L223 88 L235 107 L229 111 L229 137 L222 131 L218 151 L209 128 L205 103 L187 119 L189 99 L166 120 L169 100 L147 122 L150 104 L130 123 L132 107 L112 130 L111 112 L103 139Z" fill="#39332e"/>
+    <path d="M104 96 L126 82 L125 78 L150 79 L155 72 L174 77 L185 72 L199 83" fill="none" stroke="#73604c" stroke-width="4.6"/>
+    <path d="M196 89 l11 9" fill="none" stroke="#73604c" stroke-width="2.6"/>
+    <g id="expression">
+    <path d="M124 145 Q136 155 148 144" fill="none" stroke-width="3.4"/>
+    <path d="M127 149 l-2 3" fill="none" stroke-width="2"/>
+    <path d="M172 145 Q184 155 196 144" fill="none" stroke-width="3.4"/>
+    <path d="M175 149 l-2 3" fill="none" stroke-width="2"/>
+    <ellipse cx="119" cy="162" rx="10" ry="5" fill="#ed9a9c" stroke="none" opacity=".58"/>
+    <ellipse cx="201" cy="162" rx="10" ry="5" fill="#ed9a9c" stroke="none" opacity=".58"/>
+    <path d="M158 155 q-2 5 3 5" fill="none" stroke="#d39a7d" stroke-width="1.8"/>
+    <path d="M155 173 q5 4 10 0" fill="none" stroke-width="2.2"/>
+    </g>
+    </g>
+    <g id="mood-marks">
+    <g stroke="#799bb1" stroke-width="3.8">
+    <path d="M229 91 H242 L230 105 H243" fill="none"/>
+    <path d="M247 64 H264 L248 82 H265" fill="none"/>
+    <path d="M265 32 H286 L267 54 H288" fill="none"/>
+    </g>
+    </g>
+  </g>
+</svg>
