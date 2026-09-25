@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish self-contained builds
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          for rid in win-x64 osx-arm64; do
+            dotnet publish DesktopPetOrHuman/DesktopPetOrHuman.csproj \
+              -c Release -r "$rid" --self-contained true \
+              -o "dist/DesktopPetOrHuman-$rid"
+            (cd dist && zip -qr -X "DesktopPetOrHuman-${GITHUB_REF_NAME}-$rid.zip" "DesktopPetOrHuman-$rid")
+          done
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: DesktopPetOrHuman ${{ github.ref_name }}
+          body_path: .github/release-notes/${{ github.ref_name }}.md
+          files: dist/*.zip
